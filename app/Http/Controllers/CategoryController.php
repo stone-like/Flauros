@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-
-
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use App\Http\Requests\CreateCategoryRequest;
+use App\Http\Requests\UpdateCategoryRequest;
 use App\ModelAndRepository\Categories\Category;
+use App\ModelAndRepository\Categories\Repository\CategoryRepository;
 use App\ModelAndRepository\Categories\Repository\CategoryRepositoryInterface;
 
 
@@ -44,9 +44,27 @@ class CategoryController extends Controller
     public function detachProduct(){
 
     }
-    //deleteCategory(子供も消す)
-    public function deleteCategory(){
+    public function createCategory(CreateCategoryRequest $request):Category{
+        //これ加工の役割は一旦modelでやるのもありだと思うんだけど・・・どうなんだろう
+        //requestの加工
+        $params = Category::makeRequest($request);
+      
+      
+       return $this->categoryRepo->createCategory($params);
+    }
+    public function updateCategory(int $id,UpdateCategoryRequest $request):Category{
+         //updateするときは一旦createしたやつから変えて全てを送るはずなのでnameは絶対入っている
+         $params = Category::makeRequest($request);
+         $category = $this->categoryRepo->findCategoryById($id);
+         $cat = new CategoryRepository($category);
+         return $cat->updateCategory($params);
 
+    }
+    //deleteCategory(子供も消す)←これは自動でやってくれるのでうれしい
+    public function deleteCategory(int $id):bool{
+        $category = $this->categoryRepo->findCategoryById($id);
+        $cat = new CategoryRepository($category);
+        return $cat->deleteCategory();
     }
 
 

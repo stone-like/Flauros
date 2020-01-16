@@ -5,9 +5,10 @@ namespace Tests\Unit;
 
 use Tests\TestCase;
 use Illuminate\Support\Str;
+use App\ModelAndRepository\Users\User;
 use App\ModelAndRepository\Categories\Category;
-use App\ModelAndRepository\Categories\Repository\CategoryRepository;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\ModelAndRepository\Categories\Repository\CategoryRepository;
 
 class CategoryTest extends TestCase
 {
@@ -70,6 +71,7 @@ class CategoryTest extends TestCase
         $rootCategories = $categoryRepo->getRootCategory();
         $this->assertCount(3,$rootCategories);
     }
+
 
     
 }
