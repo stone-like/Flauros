@@ -14,11 +14,17 @@ use Illuminate\Http\Request;
 */
 
 Route::get("/categories","CategoryController@getRootCategory");
+Route::get("/categories/{id}","CategoryController@getChildCategory");
 
 Route::group(["middleware" => ["role:admin|staff"]],function(){
     Route::post("/categories","CategoryController@createCategory");
     Route::patch("/categories/{id}","CategoryController@updateCategory");
     Route::delete("/categories/{id}","CategoryController@deleteCategory");
+
+    Route::post("/products","ProductController@createProduct");
+    Route::patch("/products/{id}","ProductController@updateProduct");
+    Route::delete("/products/{id}","ProductController@deleteProduct");
+
 });
 
 

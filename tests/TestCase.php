@@ -5,20 +5,27 @@ namespace Tests;
 use Spatie\Permission\Models\Role;
 use App\ModelAndRepository\Users\User;
 use Spatie\Permission\Models\Permission;
+use App\ModelAndRepository\Products\Product;
 use App\ModelAndRepository\Categories\Category;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
+use App\ModelAndRepository\Products\Repository\ProductRepository;
+use App\ModelAndRepository\Categories\Repository\CategoryRepository;
 
 abstract class TestCase extends BaseTestCase
 {
     use CreatesApplication;
 
     protected $category;//repositoryでnewするするときとかにdummy的に使う
+    protected $product;
 
     public function setUp():void{
         parent::setUp();
 
         $this->category = factory(Category::class)->create();
+        $this->product = factory(Product::class)->create();
+        $this->cateRepo = new CategoryRepository();
+        $this->proRepo = new ProductRepository();
         
         //roleとpermissionの設定
         $roles = [

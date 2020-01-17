@@ -19,9 +19,9 @@ class CreateProductsTable extends Migration
             $table->string("slug");
             $table->text("description")->nullable();
             $table->string("image")->nullable();
-            $table->integer("quantity");
-            $table->decimal("price");
-            $table->string("status");
+            $table->integer("quantity")->unsigned();
+            $table->integer("price")->unsigned();
+            $table->string("status")->nullable();
             $table->timestamps();
             //後でreviewとlike関連のを付け足す
         });

@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Testing\WithFaker;
 use App\ModelAndRepository\Categories\Category;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\ModelAndRepository\Categories\Repository\CategoryRepository;
 
 class CategoryTest extends TestCase
 {
@@ -215,7 +216,28 @@ class CategoryTest extends TestCase
 
         $this->assertDatabaseMissing("categories",["name" => $postedCategory["name"]]);
         $this->assertCount(0,$this->category->fresh()->descendants()->get());
- 
+    }
+
+     /** @test */
+     public function can_get_category_with_product_and_children(){
+        $category2 = factory(Category::class)->create([
+            "parent_id" => $this->category->id
+        ]);
+        $category3 = factory(Category::class)->create([
+            "parent_id" => $category2->id
+        ]);
+        $this->cateRepo->attachProducts($category3->id,[$this->product->id]);
+        
+
+        //categoryIdからcategoryModelと、そのchildren、productが返ってくるようにしたい
+        $categoryData = $this->get("/api/categories/".$category2->id);
+       
+        $this->assertEquals($category2->id,$categoryData["category"]["id"]);
+        $this->assertEquals($category2->children->toArray(),$categoryData["children"]);
+        
+        foreach (array_map(null,$this->cateRepo->getProducts($category2->id)->toArray(),$categoryData["products"]) as [$val1,$val2]){
+            $this->assertEquals($val1["id"],$val2["id"]);
+        }
     }
 
 }

@@ -11,10 +11,13 @@ use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model;
 use App\Http\Requests\CreateCategoryRequest;
 use App\ModelAndRepository\Products\Product;
+use App\ModelAndRepository\Traits\Requestable;
+
+
 
 class Category extends Model
 {
-    use NodeTrait;
+    use NodeTrait,Requestable;
 
     protected $fillable  = [
         "name",
@@ -25,26 +28,6 @@ class Category extends Model
 
     public function products(){
         return $this->belongsToMany(Product::class);
-    }
-
-    public static function makeRequest(Request $request):array{
-          //ここでrequestを新しくしているのはmergeがうまくいかないため、ここでただ持ってきたrequestとimageをmergeしてしまうとimageの詳細なデータまでmergeしてしまう
-          $request = new Request($request->all());
-
-          $slug = Str::slug($request->name);
-          //なぜかfilledで空扱いされてしまう・・・？
-          if($request->has("image") && $request->image instanceOf UploadedFile){
-              $image = $request->image->store("categories",["disk" => "public"]);
-          }
-
-          $request->merge([
-              "slug" => $slug,
-              "image" => $image
-          ]);
-
-         
-          
-          return $request->all();
     }
     
 }

@@ -9,10 +9,14 @@ interface CategoryRepositoryInterface
 {
     public function getRootCategory():Collection;
     public function createCategory(array $params):Category;
-    public function updateCategory(array $params):Category;
-    public function deleteCategory():bool;
+    public function updateCategory(int $id,array $params):Category;
+    public function deleteCategory(int $id):bool;
     public function findCategoryById(int $id):Category;
     // public function findCategoryBySlug(string $slug):Category;
-    // public function attachProduct();
-    // public function detachProduct();
+    public function attachProducts(int $id,array $params);
+    public function detachProducts(int $id,array $params);
+    public function syncProducts(int $id,array $params);
+    public function getProducts(int $id):Collection;
+
+
 }
