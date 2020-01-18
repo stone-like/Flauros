@@ -2,9 +2,12 @@
 
 namespace App\ModelAndRepository\Products;
 
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Model;
 use App\ModelAndRepository\Traits\Requestable;
 use App\ModelAndRepository\Categories\Category;
+use App\ModelAndRepository\ProductImages\ProductImages;
 
 class Product extends Model
 {
@@ -24,6 +27,10 @@ class Product extends Model
         return $this->belongsToMany(Category::class);
     }
 
+    public function productimages(){
+        return $this->hasMany(ProductImages::class);
+    }
+
     public static function getStatus(int $quantity):string{
         if($quantity === 0){
            return   "sold out";
@@ -35,4 +42,6 @@ class Product extends Model
 
          return $quantity." items left";
     }
+
+   
 }

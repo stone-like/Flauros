@@ -2,8 +2,9 @@
 
 namespace App\ModelAndRepository\Categories\Repository;
 
-use App\Exceptions\CategoryNotFoundException;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
+use App\Exceptions\CategoryNotFoundException;
 use App\ModelAndRepository\Categories\Category;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
@@ -14,9 +15,20 @@ class CategoryRepository implements CategoryRepositoryInterface{
         return Category::where("parent_id",NULL)->get();
     }
 
+    
+
     public function createCategory(array $params):Category{
         //validationはrequestで完了している
+        
+        //単純な加工はほかで、入出力が伴うパラメーターはrepositoryでやることにした
+        if(isset($params["image"]) && $params["image"] instanceOf UploadedFile){
+            $image = $params["image"]->store("categories",["disk" => "public"]);  
+        }
+
+        $params["image"] = $image;
+
         $category = Category::create($params);
+        
         if(isset($params["parent_id"])){
             $parent = $this->findCategoryById($params["parent_id"]);
             $category->parent()->associate($parent);
@@ -27,9 +39,14 @@ class CategoryRepository implements CategoryRepositoryInterface{
     }
 
     public function updateCategory(int $id,array $params):Category{
-        $category = $this->findCategoryById($id);
-        //validationはrequestで完了している
-       
+        
+        if(isset($params["image"]) && $params["image"] instanceOf UploadedFile){
+            $image = $params["image"]->store("categories",["disk" => "public"]);  
+        }
+
+        $params["image"] = $image;
+
+        $category = $this->findCategoryById($id); 
         //ここで結果がおかしくなったのはfreshしないから、子のupdateに乗じて親も更新されるので親自体を陽にupdateしなくてもfreshをしないとだめ
 
         $category->update($params);   

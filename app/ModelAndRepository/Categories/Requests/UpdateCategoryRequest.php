@@ -1,6 +1,7 @@
 <?php
+namespace App\ModelAndRepository\Categories\Requests;
 
-namespace App\Http\Requests;
+
 
 use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
@@ -34,7 +35,6 @@ class UpdateCategoryRequest extends FormRequest
             "name"=>["required",
         "unique:categories,name",
         Rule::unique('categories')->ignore((int)$this->id)],
-            "image"=>["sometimes","image"],
             "parent_id"=>["sometimes",
            "exists:categories,id"]
         ];

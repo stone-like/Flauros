@@ -1,11 +1,11 @@
 <?php
+namespace App\ModelAndRepository\Addresses\Requests;
 
-namespace App\Http\Requests;
 
-use Illuminate\Validation\Rule;
+
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateCategoryRequest extends FormRequest
+class CreateAddressRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,11 +25,10 @@ class CreateCategoryRequest extends FormRequest
     public function rules()
     {
         return [
-            "name"=>["required",
-        "unique:categories,name"],
-            "image"=>["sometimes","image"],
-            "parent_id"=>["sometimes",
-           "exists:categories,id"]
+            "zip"=>["required"],
+            "address1"=>["required"],
+            "country_id"=>["exists:countries,id"],
+            "prefecture_id"=>["exists:prefectures,id"],
         ];
     }
 }

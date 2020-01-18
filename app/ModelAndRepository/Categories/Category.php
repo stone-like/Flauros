@@ -13,8 +13,6 @@ use App\Http\Requests\CreateCategoryRequest;
 use App\ModelAndRepository\Products\Product;
 use App\ModelAndRepository\Traits\Requestable;
 
-
-
 class Category extends Model
 {
     use NodeTrait,Requestable;
@@ -29,5 +27,6 @@ class Category extends Model
     public function products(){
         return $this->belongsToMany(Product::class);
     }
+
     
 }

@@ -12,20 +12,15 @@ trait Requestable{
        $request = new Request($request->all());
 
        $slug = Str::slug($request->name);
-       //なぜかfilledで空扱いされてしまう・・・？
-       if($request->has("image") && $request->image instanceOf UploadedFile){
-           $image = $request->image->store($storeTo,["disk" => "public"]);
-       }
-
        $request->merge([
-           "slug" => $slug,
-           "image" => $image
-       ]);
-
-       if($storeTo === "products"){
+        "slug" => $slug
+    ]);
+         if($storeTo === "products"){
            $request->merge([
                "status" => Product::getStatus($request->quantity)
            ]);
+           //productsの場合imagesだけ除きたい
+           return $request->except("images");
        }
       
        return $request->all();

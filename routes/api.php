@@ -27,4 +27,12 @@ Route::group(["middleware" => ["role:admin|staff"]],function(){
 
 });
 
+//loginしているだけだとauthで制限をかければいいのかrole:userで制限をかければいいのかどっち？
+Route::group(["middleware" => ["role:admin|staff|user"]],function(){
+    Route::post("/addresses","AddressController@createAddress");
+    Route::patch("/addresses/{id}","AddressController@updateAddress");
+    Route::delete("/addresses/{id}","AddressController@deleteAddress");
+
+});
+
 

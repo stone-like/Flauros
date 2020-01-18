@@ -10,12 +10,11 @@ use App\ModelAndRepository\Products\Product;
 $factory->define(Product::class, function (Faker $faker) {
     $name = $faker->unique()->sentence;
     //カテゴリーは別にユーザーが追加する物じゃないしここで適当に毎回入れちゃっていいかな
-    $file = UploadedFile::fake()->image("product.png",500,500);
+   
     return [
         "name" => $name,
         "slug" => Str::slug($name),
         "description" => $faker->paragraph,
-        "image" => $file->store("products",["disk" => "public"]),
         "quantity" => 5,
         "price" => 10.00,
         "status" => "5 items left"

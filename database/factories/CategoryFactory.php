@@ -13,7 +13,9 @@ $factory->define(Category::class, function (Faker $faker) {
         "Book",
         "Cloth",
         "Shoes",
-        "Grocery"
+        "Grocery",
+        "Toy",
+        "Game"
     ]);
 
     $file = UploadedFile::fake()->image('category.jpg',500,500);

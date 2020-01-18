@@ -1,10 +1,11 @@
 <?php
+namespace App\ModelAndRepository\Products\Requests;
 
-namespace App\Http\Requests;
 
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateProductRequest extends FormRequest
+class UpdateProductRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,14 +24,13 @@ class CreateProductRequest extends FormRequest
      */
     public function rules()
     {
-        //一応権限与えた人しかいじれないのでspam対策はいらないか？
         return [
             "name"=>["required",
-        "unique:products,name"],
-            "image"=>["sometimes","image"],
+            Rule::unique('products')->ignore((int)$this->id)],
+            "images.*.photo"=>["sometimes","image"],
             "quantity"=>["required"],
             "price"=>["required"],
-            "category_id"=>["required","exists:categories,id"]//後で追加もありにしようかと思ったけど多分しないと思ったのでrequire       
+            "category_id"=>["required","exists:categories,id"]      
         ];
     }
 }

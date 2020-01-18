@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use Tests\TestCase;
 use Illuminate\Http\UploadedFile;
 use App\ModelAndRepository\Users\User;
+use App\ModelAndRepository\Products\Product;
 use Illuminate\Foundation\Testing\WithFaker;
 use App\ModelAndRepository\Categories\Category;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -22,8 +23,7 @@ class ProductTest extends TestCase
         $name = "dummy";
       
         $product = [
-            "name"=>$name,
-            "image"=>$file = UploadedFile::fake()->image('product.jpg',500,500),
+            "name"=>$name,  
             "category_id" => $this->category->id,
             "quantity" => 3,
             "price" =>600,
@@ -44,7 +44,7 @@ class ProductTest extends TestCase
         
         $product = [
             "name"=>$name,
-            "image"=>$file = UploadedFile::fake()->image('product.jpg',500,500),
+           
             "category_id" => $this->category->id,
             "quantity" => 3,
             "price" =>600,
@@ -67,7 +67,7 @@ class ProductTest extends TestCase
        
         $product = [
             "name"=>$name,
-            "image"=>$file = UploadedFile::fake()->image('product.jpg',500,500),
+           
             "category_id" => 99999,
             "quantity" => 3,
             "price" =>600,
@@ -92,8 +92,7 @@ class ProductTest extends TestCase
         $name = "dummy";
         
         $product = [
-            "name"=>$name,
-            "image"=>$file = UploadedFile::fake()->image('product.jpg',500,500),
+            "name"=>$name,      
             "category_id" => $category3->id,
             "quantity" => 3,
             "price" =>600,
@@ -110,4 +109,117 @@ class ProductTest extends TestCase
 
        
     }
+    //validationがはいるupdateとcreateはunittestいらなさそうな気も・・・deleteはいいと思うけど
+    /** @test */
+    public function authorized_user_can_update_product(){
+       
+        // $this->withoutExceptionHandling();
+       
+       $user = factory(User::class)->create();
+     
+       $product = [
+           "name"=>"dummy",
+          
+           "category_id" => $this->category->id,
+           "quantity" => 3,
+           "price" =>600,
+       ];
+       
+       $user->assignRole("staff");
+       $this->signIn($user);//staffでログイン
+
+       $postedProduct = $this->post("/api/products",$product);
+    
+       
+       $product = [
+        "name"=>"dummy2",
+       
+        "category_id" => $this->category->id,
+        "quantity" => 0,
+        "price" =>600,
+    ];
+    
+        $this->patch("/api/products/".$postedProduct["id"],$product);
+        
+        $targetProduct = $this->proRepo->findProductById($postedProduct["id"]);
+
+        $this->assertEquals($targetProduct->name,$product["name"]);
+        $this->assertEquals($targetProduct->status,"sold out"); 
+   }
+   
+   /** @test */
+   public function successfully_move_to_other_category(){
+        $this->withoutExceptionHandling();
+
+       $cat1Child = factory(Category::class)->create(["parent_id"=>$this->category->id]);
+       $cat1Grandson = factory(Category::class)->create(["parent_id"=>$cat1Child->id]);
+
+       $category2 = factory(Category::class)->create();
+       $cat2Child = factory(Category::class)->create(["parent_id"=>$category2->id]);
+       $cat2Grandson = factory(Category::class)->create(["parent_id"=>$cat2Child->id]);
+
+       $user = factory(User::class)->create();
+     
+       $product = [
+           "name"=>"dummy",
+          
+           "category_id" => $cat1Grandson->id,
+           "quantity" => 3,
+           "price" =>600,
+       ];
+       
+       $user->assignRole("staff");
+       $this->signIn($user);//staffでログイン
+
+       $postedProduct = $this->post("/api/products",$product);
+    
+       
+       $product = [
+        "name"=>"dummy2",
+       
+        "category_id" => $cat2Grandson->id,
+        "quantity" => 0,
+        "price" =>600,
+    ];
+    
+        $this->patch("/api/products/".$postedProduct["id"],$product);
+        
+        
+        $this->assertCount(0,$this->cateRepo->getProducts($cat1Grandson->id));
+        $this->assertCount(0,$this->cateRepo->getProducts($cat1Child->id));
+        $this->assertCount(1,$this->cateRepo->getProducts($cat2Grandson->id));
+        $this->assertCount(1,$this->cateRepo->getProducts($cat2Child->id));
+
+   }
+
+    /** @test */
+    public function successfully_delete_with_category(){
+
+       $cat1Child = factory(Category::class)->create(["parent_id"=>$this->category->id]);
+       $cat1Grandson = factory(Category::class)->create(["parent_id"=>$cat1Child->id]);
+
+    
+
+       $user = factory(User::class)->create();
+     
+       $product = [
+           "name"=>"dummy",
+          
+           "category_id" => $cat1Grandson->id,
+           "quantity" => 3,
+           "price" =>600,
+       ];
+       
+       $user->assignRole("staff");
+       $this->signIn($user);//staffでログイン
+
+       $postedProduct = $this->post("/api/products",$product);
+        $this->delete("/api/products/".$postedProduct["id"]);
+        
+        $this->assertCount(0,$this->cateRepo->getProducts($cat1Child->id));
+        $this->assertCount(0,$this->cateRepo->getProducts($cat1Grandson->id));
+
+        
+
+   }
 }

@@ -4,10 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
-use App\Http\Requests\CreateCategoryRequest;
-use App\Http\Requests\UpdateCategoryRequest;
+
 use App\ModelAndRepository\Categories\Category;
 use App\ModelAndRepository\Categories\Repository\CategoryRepository;
+use App\ModelAndRepository\Categories\Requests\CreateCategoryRequest;
+use App\ModelAndRepository\Categories\Requests\UpdateCategoryRequest;
 use App\ModelAndRepository\Categories\Repository\CategoryRepositoryInterface;
 
 
@@ -57,7 +58,7 @@ class CategoryController extends Controller
     }
     //deleteCategory(子供も消す)←これは自動でやってくれるのでうれしい
     public function deleteCategory(int $id):bool{
-        $this->categoryRepo->syncProducts($id,[]);
+        // $this->categoryRepo->syncProducts($id,[]);//これはondeleteでやってくれる
         return $this->categoryRepo->deleteCategory($id);
     }
 
