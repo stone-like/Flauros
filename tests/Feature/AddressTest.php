@@ -107,7 +107,7 @@ class AddressTest extends TestCase
      /** @test */
      public function loggedIn_user_can_delete_address(){
        
-       
+      
         $this->signIn();//一般ユーザーでlogin
        
         $data = [
@@ -120,12 +120,11 @@ class AddressTest extends TestCase
         $postedAddress = $this->post("/api/addresses",$data);
         
         $this->delete("/api/addresses/".$postedAddress["id"]);
-
+        
         
 
         $this->assertDatabaseMissing("addresses",["address1"=>$data["address1"]]);   
-        $this->assertDatabaseMissing("addresses",["country_id"=>$data["country_id"]]);        
-        $this->assertDatabaseMissing("addresses",["prefecture_id"=>$data["prefecture_id"]]);        
+           
 
     }
 }

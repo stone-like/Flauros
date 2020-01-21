@@ -19,6 +19,7 @@ class CreateProductsTable extends Migration
             $table->string("slug");
             $table->text("description")->nullable();
             $table->integer("quantity")->unsigned();
+            $table->integer("weight")->unsigned();
             $table->integer("price")->unsigned();
             $table->string("status")->nullable();
             $table->timestamps();

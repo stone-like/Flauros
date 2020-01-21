@@ -26,6 +26,7 @@ class ProductImageTest extends TestCase
            "category_id" => $this->category->id,
            "quantity" => 3,
            "price" =>600,
+           "weight"=>500,
            "images" => $images
        ];
        
@@ -59,6 +60,8 @@ class ProductImageTest extends TestCase
             "category_id" => $this->category->id,
             "quantity" => 3,
             "price" =>600,
+            "weight"=>500,
+
             "images" => $images
         ];
         

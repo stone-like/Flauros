@@ -24,7 +24,7 @@ class AddressRepository implements AddressRepositoryInterface{
     public function deleteAddress(int $id): bool
     {
         $address = $this->findAddressById($id);
-
+        
        return $address->delete();    
     }
     public function findAddressById(int $id):Address{

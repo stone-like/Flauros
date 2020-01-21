@@ -16,7 +16,8 @@ $factory->define(Product::class, function (Faker $faker) {
         "slug" => Str::slug($name),
         "description" => $faker->paragraph,
         "quantity" => 5,
-        "price" => 10.00,
+        "price" => 10,
+        "weight"=>300,
         "status" => "5 items left"
     ];
 });

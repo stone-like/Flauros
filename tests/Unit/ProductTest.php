@@ -21,6 +21,8 @@ class ProductTest extends TestCase
             "category_id" => $this->category->id,
             "quantity" => 3,
             "price" =>600,
+            "weight"=>500,
+
             "status" => "3 items left"
         ];
         $postedProduct = $this->proRepo->createProduct($product);

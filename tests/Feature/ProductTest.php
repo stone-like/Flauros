@@ -27,6 +27,7 @@ class ProductTest extends TestCase
             "category_id" => $this->category->id,
             "quantity" => 3,
             "price" =>600,
+            "weight"=>500
         ];
         
         $user->assignRole("staff");
@@ -48,6 +49,7 @@ class ProductTest extends TestCase
             "category_id" => $this->category->id,
             "quantity" => 3,
             "price" =>600,
+            "weight"=>500
         ];
 
         $user->assignRole("staff");
@@ -71,6 +73,7 @@ class ProductTest extends TestCase
             "category_id" => 99999,
             "quantity" => 3,
             "price" =>600,
+            "weight"=>500
         ];
 
         $user->assignRole("staff");
@@ -96,6 +99,7 @@ class ProductTest extends TestCase
             "category_id" => $category3->id,
             "quantity" => 3,
             "price" =>600,
+            "weight"=>500
         ];
 
         $user->assignRole("staff");
@@ -123,6 +127,7 @@ class ProductTest extends TestCase
            "category_id" => $this->category->id,
            "quantity" => 3,
            "price" =>600,
+           "weight"=>500
        ];
        
        $user->assignRole("staff");
@@ -137,6 +142,7 @@ class ProductTest extends TestCase
         "category_id" => $this->category->id,
         "quantity" => 0,
         "price" =>600,
+        "weight"=>500
     ];
     
         $this->patch("/api/products/".$postedProduct["id"],$product);
@@ -166,6 +172,7 @@ class ProductTest extends TestCase
            "category_id" => $cat1Grandson->id,
            "quantity" => 3,
            "price" =>600,
+           "weight"=>500
        ];
        
        $user->assignRole("staff");
@@ -180,6 +187,7 @@ class ProductTest extends TestCase
         "category_id" => $cat2Grandson->id,
         "quantity" => 0,
         "price" =>600,
+        "weight"=>500
     ];
     
         $this->patch("/api/products/".$postedProduct["id"],$product);
@@ -208,6 +216,7 @@ class ProductTest extends TestCase
            "category_id" => $cat1Grandson->id,
            "quantity" => 3,
            "price" =>600,
+           "weight"=>500
        ];
        
        $user->assignRole("staff");

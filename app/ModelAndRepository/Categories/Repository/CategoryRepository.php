@@ -15,6 +15,16 @@ class CategoryRepository implements CategoryRepositoryInterface{
         return Category::where("parent_id",NULL)->get();
     }
 
+    public function getChildCategory(int $id):array{
+        $category = $this->findCategoryById($id);
+        $category->load("products");
+        return [
+            "category"=> $category,
+            "children" => $category->children,
+            "products" => $category->products
+        ];
+    }
+
     
 
     public function createCategory(array $params):Category{

@@ -8,6 +8,7 @@ use App\ModelAndRepository\Categories\Category;
 interface CategoryRepositoryInterface 
 {
     public function getRootCategory():Collection;
+    public function getChildCategory(int $id):array;
     public function createCategory(array $params):Category;
     public function updateCategory(int $id,array $params):Category;
     public function deleteCategory(int $id):bool;

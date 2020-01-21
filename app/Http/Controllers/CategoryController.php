@@ -28,13 +28,9 @@ class CategoryController extends Controller
     //getCategory,middleかlastか判定する,withでProductとってくればいいかな？
     public function getChildCategory(int $id):array{
          //一応validationかけなくてもrepositoryでexceptionが出るようになってるが
-         $category = $this->categoryRepo->findCategoryById($id);
-         return [
-             "category" => $category,
-             //直属のchildのみ
-             "children" => $category->children,
-             "products" => $this->categoryRepo->getProducts($id)
-         ];
+         //ここはまとめたほうがtestしやすそう
+        
+         return $this->categoryRepo->getChildCategory($id);
     }
     //productを作るときにproductとどこのcategoryに登録するかを選ぶ、productの操作は特に行わないけど、categoryは少しやることがあるのでこっちでよさそう
     //ここからはsubAdmin以上しか使えない

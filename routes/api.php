@@ -15,6 +15,13 @@ use Illuminate\Http\Request;
 
 Route::get("/categories","CategoryController@getRootCategory");
 Route::get("/categories/{id}","CategoryController@getChildCategory");
+Route::get("/carts","CartController@getCartItems");
+Route::post("/carts","CartController@addCartToList");
+Route::patch("/carts","CartController@updateQuantity");
+Route::delete("/carts","CartController@removeCart");
+
+
+
 
 Route::group(["middleware" => ["role:admin|staff"]],function(){
     Route::post("/categories","CategoryController@createCategory");

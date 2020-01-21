@@ -29,7 +29,9 @@ class AddressController extends Controller
     }
     public function deleteAddress(int $id):bool{
         
-
+         
         return $this->addressRepo->deleteAddress($id);
+        
+    
     }
 }

@@ -14,6 +14,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use App\ModelAndRepository\Products\Repository\ProductRepository;
 use App\ModelAndRepository\Addresses\Repository\AddressRepository;
+use App\ModelAndRepository\ShoppingCarts\Repository\CartRepository;
 use App\ModelAndRepository\Categories\Repository\CategoryRepository;
 use App\ModelAndRepository\ProductImages\Repository\ProductImageRepository;
 
@@ -38,6 +39,7 @@ abstract class TestCase extends BaseTestCase
         $this->cateRepo = new CategoryRepository();
         $this->proRepo = new ProductRepository();
         $this->addressRepo = new AddressRepository();
+        $this->cartRepo = new CartRepository();
         
         //roleとpermissionの設定
         $roles = [
