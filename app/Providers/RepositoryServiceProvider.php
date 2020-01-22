@@ -3,10 +3,12 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use App\ModelAndRepository\Orders\Repository\OrderRepository;
 use App\ModelAndRepository\Products\Repository\ProductRepository;
 use App\ModelAndRepository\Addresses\Repository\AddressRepository;
 use App\ModelAndRepository\ShoppingCarts\Repository\CartRepository;
 use App\ModelAndRepository\Categories\Repository\CategoryRepository;
+use App\ModelAndRepository\Orders\Repository\OrderRepositoryInterface;
 use App\ModelAndRepository\Products\Repository\ProductRepositoryInterface;
 use App\ModelAndRepository\Addresses\Repository\AddressRepositoryInterface;
 use App\ModelAndRepository\ShoppingCarts\Repository\CartRepositoryInterface;
@@ -37,6 +39,11 @@ class RepositoryServiceProvider extends ServiceProvider
             CartRepositoryInterface::class,
             CartRepository::class
         );
+    
+    $this->app->bind(
+        OrderRepositoryInterface::class,
+        OrderRepository::class
+    );
     }
 
     /**

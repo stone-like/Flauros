@@ -20,7 +20,7 @@ class CreateOrdersTable extends Migration
             $table->bigInteger("order_status_id")->unsigned();
             $table->integer("total")->unsigned();//税込みでの価格
             $table->integer("discount")->unsigned();//割引
-            $table->integer("shipping fee")->unsigned();//送料
+            $table->integer("shipping_fee")->unsigned();//送料
             $table->integer("payment")->unsigned();//最終的な支払い
             
 

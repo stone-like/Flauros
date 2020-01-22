@@ -14,6 +14,8 @@ interface CartRepositoryInterface{
     public function storeToDatabase(string $username);
     public function  restoreFromDatabase(string $username);
     public function  eraseDatabase(string $username);
+    public function mergeToDatabase(string $username);
+    public function checkIdentifier(string $username):bool;
     public function getTotal():string;
     public function getSubTotal():string;
     public function getTax():string;
@@ -22,6 +24,7 @@ interface CartRepositoryInterface{
     public function getShippingFee():int;
     public function getDiscount():string;
     public function getCartItems():Collection;
+    public function getTransfromedCartItems():array;
     public function getItemCount():int;
     public function getItem(string $rowId):CartItem;
 }

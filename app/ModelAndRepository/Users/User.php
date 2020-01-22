@@ -3,6 +3,7 @@
 namespace App\ModelAndRepository\Users;
 
 use Spatie\Permission\Traits\HasRoles;
+use App\ModelAndRepository\Orders\Order;
 use Illuminate\Notifications\Notifiable;
 use App\ModelAndRepository\Addresses\Address;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -42,5 +43,9 @@ class User extends Authenticatable
 
     public function addresses(){
         return $this->hasMany(Address::class);
+    }
+
+    public function orders(){
+        return $this->hasMany(Order::class);
     }
 }

@@ -8,6 +8,7 @@ use Gloudemans\Shoppingcart\CartItem;
 
 use App\ModelAndRepository\Products\Product;
 use App\ModelAndRepository\ShoppingCarts\ShoppingCart;
+use App\ModelAndRepository\ShoppingCarts\Transforms\CartTransform;
 
 class CartRepository implements CartRepositoryInterface{
     protected $cart;
@@ -38,8 +39,17 @@ class CartRepository implements CartRepositoryInterface{
       
     }
     public function  eraseDatabase(string $username){
+      
         $this->cart->erase($username);
     }
+    public function mergeToDatabase(string $username){
+        $this->cart->merge($username);
+    }
+    public function checkIdentifier(string $username):bool{
+        return $this->cart->checkIdentifier($username);
+    }
+
+
     
     public function getTotal():string{
         
@@ -81,5 +91,17 @@ class CartRepository implements CartRepositoryInterface{
     //Eloquentじゃない方のCollection
     public function getCartItems():Collection{
          return $this->cart->content();
+    }
+
+    public function getTransfromedCartItems():array{
+        $cartItems = $this->getCartItems();
+        $subtotal = $this->getSubtotal();
+        $cartCount = count($cartItems);
+        $tax = $this->getTax();
+        $discount = $this->getDiscount();
+        $shippingFee = $this->getShippingFee();
+        $total = $this->getTotal($shippingFee);
+
+        return CartTransform::CartListTransform($cartItems,$subtotal,$cartCount,$tax,$discount,$shippingFee,$total);
     }
 }

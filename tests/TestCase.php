@@ -7,11 +7,13 @@ use Spatie\Permission\Models\Role;
 use App\ModelAndRepository\Users\User;
 use Spatie\Permission\Models\Permission;
 use App\ModelAndRepository\Products\Product;
+use App\ModelAndRepository\Addresses\Address;
 use App\ModelAndRepository\Countries\Country;
 use App\ModelAndRepository\Categories\Category;
 use App\ModelAndRepository\Prefectures\Prefecture;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
+use App\ModelAndRepository\Orders\Repository\OrderRepository;
 use App\ModelAndRepository\Products\Repository\ProductRepository;
 use App\ModelAndRepository\Addresses\Repository\AddressRepository;
 use App\ModelAndRepository\ShoppingCarts\Repository\CartRepository;
@@ -35,11 +37,13 @@ abstract class TestCase extends BaseTestCase
                 "country_id" => $country->id
             ]);
          });
+
     
         $this->cateRepo = new CategoryRepository();
         $this->proRepo = new ProductRepository();
         $this->addressRepo = new AddressRepository();
         $this->cartRepo = new CartRepository();
+        $this->orderRepo = new OrderRepository();
         
         //roleとpermissionの設定
         $roles = [
@@ -71,6 +75,11 @@ abstract class TestCase extends BaseTestCase
         $role = Role::findByName("staff");
         $role->givePermissionTo($permissions);
         //設定終わり
+    }
+
+    protected function addCart($product=null,$quantity=1){
+        $product = $product ?: factory(Product::class)->create();
+        $this->cartRepo->addCartToList($product,$quantity);
     }
 
     protected function signIn($user = null)

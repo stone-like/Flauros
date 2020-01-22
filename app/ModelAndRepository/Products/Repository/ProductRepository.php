@@ -24,6 +24,14 @@ use App\ModelAndRepository\Products\Repository\ProductRepositoryInterface;
             throw new ProductNotFoundException($e->getMessage());
         }
     }
+    //これとは別に検索用のserachこれは完全一致でいい
+    public function findProductBySlug(string $slug):Product{
+        try {
+            return Product::where("slug",$slug)->firstOrFail();
+        }catch(ModelNotFoundException $e){
+            throw new ProductNotFoundException($e->getMessage());
+        }
+    }
 
     public function updateProduct(int $id,array $params):Product{
         $product = $this->findProductById($id);

@@ -102,4 +102,112 @@ class CartTest extends TestCase
         $this->assertEquals( $this->product->name,$deleteData["productName"]);
         
      }
+      /** @test */
+      public function guest_can_not_restore_from_database(){
+        
+        $data = [
+            "product_id" => $this->product->id,
+            "quantity" => 1
+        ];
+       
+        $postedCart = $this->post("/api/carts",$data);
+        session()->forget("cart.default");
+        $cartlist = $this->get("/api/carts");
+        $this->assertCount(0,$cartlist["cartitems"]);
+        
+       //sessionから値をdeleteしてgetItemできればok
+               
+     }
+      /** @test */
+      public function loggedIn_user_can_delete_and_restore_from_database(){
+        $this->signIn();
+        $diffProduct = factory(Product::class)->create();
+        $data1 = [
+            "product_id" => $this->product->id,
+            "quantity" => 1
+        ];
+        $data2 = [
+            "product_id" => $diffProduct->id,
+            "quantity" => 1
+        ];
+       
+        $postedCart = $this->post("/api/carts",$data1);
+        $this->post("/api/carts",$data2);
+        
+        $data = [
+            "rowId"=>$postedCart["rowId"]
+        ];
+        $this->delete("/api/carts",$data);
+        session()->forget("cart.default");
+        $cartlist = $this->get("/api/carts");
+        $this->assertCount(1,$cartlist["cartitems"]);
+        
+       //sessionから値をdeleteしてgetItemできればok
+               
+     }
+
+      /** @test */
+      public function loggedIn_user_can_update_restore_from_database(){
+        $this->signIn();
+        
+        $data = [
+            "product_id" => $this->product->id,
+            "quantity" => 1
+        ];
+        
+       
+        $postedCart = $this->post("/api/carts",$data);
+        
+        
+        $data = [
+            "rowId"=>$postedCart["rowId"],
+            "quantity"=>2
+        ];
+        $this->patch("/api/carts",$data);
+        session()->forget("cart.default");
+        $cartlist = $this->get("/api/carts");
+        dump($cartlist);
+        $this->assertEquals(2,$cartlist["cartitems"][$postedCart["rowId"]]["qty"]);
+        
+       
+               
+     }
+      /** @test */
+      public function loggedIn_user_can_erase_database(){
+        $this->signIn();
+        $data = [
+            "product_id" => $this->product->id,
+            "quantity" => 1
+        ];
+       
+        $postedCart = $this->post("/api/carts",$data);
+        $this->delete("/api/clearcart");
+        session()->forget("cart.default");
+        $cartlist = $this->get("/api/carts");
+        $this->assertCount(0,$cartlist["cartitems"]);
+        
+       //sessionから値をdeleteしてgetItemできればok
+               
+     }
+     /** @test */
+     public function databse_clear_when_cart_count_is_0(){
+         $this->withoutExceptionHandling();
+        $this->signIn();
+        $data = [
+            "product_id" => $this->product->id,
+            "quantity" => 1
+        ];
+       
+        $postedCart = $this->post("/api/carts",$data);
+        $data=[
+            "rowId" => $postedCart["rowId"]
+        ];
+        $this->delete("/api/carts",$data);
+        session()->forget("cart.default");
+        $cartlist = $this->get("/api/carts");
+        $this->assertCount(0,$cartlist["cartitems"]);
+        
+       //sessionから値をdeleteしてgetItemできればok
+               
+     }
 }

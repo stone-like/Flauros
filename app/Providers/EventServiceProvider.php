@@ -18,6 +18,11 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+        OrderCompleted::class => [
+            SendEmailToOrderedUser::class,
+            CreateQueuedOrder::class
+            //運営に対してもevent
+        ]
     ];
 
     /**

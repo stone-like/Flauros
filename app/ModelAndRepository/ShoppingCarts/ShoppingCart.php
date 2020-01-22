@@ -6,6 +6,7 @@ namespace App\ModelAndRepository\ShoppingCarts;
 use Gloudemans\Shoppingcart\Cart;
 use Gloudemans\Shoppingcart\CartItem;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\DatabaseManager;
 
 class ShoppingCart extends Cart
 {
@@ -30,10 +31,31 @@ class ShoppingCart extends Cart
     }
 
     public function setShippingFee(int $shipping_fee){
-        $this->shippinhFee = $shipping_fee;
+        $this->shippingFee = $shipping_fee;
     }
     public function getShippingFee():int{
-        return $this->shippinhFee;
+        return $this->shippingFee;
+    }
+
+    public function getConn()
+    {
+        $connectionName = $this->getConnName();
+        return app(DatabaseManager::class)->connection($connectionName);
+    }
+    
+    public function getTblName()
+    {
+        return config('cart.database.table', 'shoppingcart');
+    }
+    
+    public function getConnName()
+    {
+        $connection = config('cart.database.connection');
+        return is_null($connection) ? config('database.default') : $connection;
+    }
+    
+    public function checkIdentifier(string $identifier):bool{
+        return $this->getConn()->table($this->getTblName())->where('identifier', $identifier)->exists();
     }
 
     //shippingFeeを扱えるようにtotalをoverride

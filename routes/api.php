@@ -19,6 +19,8 @@ Route::get("/carts","CartController@getCartItems");
 Route::post("/carts","CartController@addCartToList");
 Route::patch("/carts","CartController@updateQuantity");
 Route::delete("/carts","CartController@removeCart");
+Route::delete("/clearcart","CartController@clearCart");
+
 
 
 
@@ -39,7 +41,7 @@ Route::group(["middleware" => ["role:admin|staff|user"]],function(){
     Route::post("/addresses","AddressController@createAddress");
     Route::patch("/addresses/{id}","AddressController@updateAddress");
     Route::delete("/addresses/{id}","AddressController@deleteAddress");
-
+    Route::post("/orders","OrderController@createOrder"); 
 });
 
 

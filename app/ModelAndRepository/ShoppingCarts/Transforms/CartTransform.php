@@ -25,11 +25,15 @@ class CartTransform {
              "subtotal" => $subtotal
         ];
     }
-    public static function CartListTransform(Collection $cartitems,string $subtotal,int $cartCount):array{
+    public static function CartListTransform(Collection $cartitems,string $subtotal,int $cartCount,string $tax,string $discount,int $shippingFee,string $total):array{
         //今追加したカートと、追加したproductの情報と、カートの点数がいる
         return [
             "subtotal" => $subtotal,
             "cartCount" => $cartCount,
+            "tax" => $tax,
+            "discount" => $discount,
+            "shippingFee" => $shippingFee,
+            "total" => $total,
             "cartitems" => $cartitems
         ];
  }
